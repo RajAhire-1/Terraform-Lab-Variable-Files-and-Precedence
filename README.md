@@ -1,8 +1,8 @@
 # Terraform Variable Files — Precedence
 
-> Professional README for the Terraform lab: *Variable Files — Precedence*
+ Professional README for the Terraform lab: *Variable Files — Precedence*
 
----
+
 
 ## Overview
 
@@ -12,7 +12,7 @@ Use this README as a quick reference for how Terraform chooses variable values a
 
 ---
 
-## Key takeaways (short)
+## Key takeaways 
 
 * Terraform merges variable values from multiple sources and uses a defined precedence to decide which value to use.
 * Command-line values are strongest and the `default` in a `variable` block is the weakest.
@@ -31,7 +31,6 @@ Terraform resolves variables in this order (later sources override earlier ones)
 5. **Environment variables** in the form `TF_VAR_<name>`
 6. **`default` argument in the `variable` block** inside Terraform configuration
 
-> Note: This ordering is taken from the Terraform documentation — command-line and HCP variables take precedence over file-based and environment values.
 
 ---
 
@@ -60,8 +59,6 @@ When multiple sources supply the same variable name, Terraform will pick the val
 │   └── variable_tfvars_terraform_apply.png
 └── README.md
 ```
-
-> The `img/` folder contains the screenshots captured during the hands-on runs. Filenames match the screenshots recorded from the environment.
 
 ---
 
