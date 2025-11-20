@@ -9,6 +9,7 @@
 This repository demonstrates how Terraform resolves input variables when they are defined in multiple places (CLI flags, `.tfvars` files, environment variables, and `variable` blocks). The goal of this project is to show the order of precedence with practical examples and screenshots from an AWS EC2 provisioning exercise.
 
 Use this README as a quick reference for how Terraform chooses variable values and as a guide to reproduce the examples shown in the screenshots folder (`img/`).
+![ovetrview](img/overview(3).png)
 
 ---
 
