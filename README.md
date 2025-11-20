@@ -111,8 +111,6 @@ Below are the project screenshots (they live in the `img/` folder). If you want 
 
 ![auto.tfvars apply](img/variable_auto_tfvars_terraform_apply.png)
 
-![terraform.tf server](img/data/variable_tf_server.png)
-
 ![terraform.tf apply](img/variable_tf_terraform_apply.png)
 
 ![tfvars server](img/variable_tfvars_server.png)
@@ -122,23 +120,3 @@ Below are the project screenshots (they live in the `img/` folder). If you want 
 ---
 
 
-
-All previously embedded images are preserved below (files live under `img/` in the repo). If you prefer inline previews in this README, ensure that your Git host allows rendering images with spaces in names or rename them to use dashes or underscores; e.g. `var-cli-server.png`.
-
-![CLI override server](img/var_cli_server.png)
-
-![CLI apply output](img/var_cli_terraform_apply.png)
-
-![auto.tfvars server](img/variable_auto_tfvars_server.png)
-
-![auto.tfvars apply](img/variable_auto_tfvars_terraform_apply.png)
-
-![terraform.tf server](img/variable_tf_server.png)
-
-![terraform.tf apply](img/variable_tf_terraform_apply.png)
-
-![tfvars server](img/variable_tfvars_server.png)
-
-![tfvars apply](img/variable_tfvars_terraform_apply.png)
-
----
