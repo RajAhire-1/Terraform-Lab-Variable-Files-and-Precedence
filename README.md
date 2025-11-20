@@ -105,7 +105,7 @@ Never commit plaintext secrets (passwords, keys, tokens) to your Git repository.
 
 Below are the project screenshots (they live in the `img/` folder). If you want to preview them here, use the links to the files stored in the project.
 
-![CLI override server](/mnt/data/-var cli server.png)
+![CLI override server](/mnt/data/var_cli_server.png)
 
 ![CLI apply output](/mnt/data/-var_cli terraform_apply.png)
 
