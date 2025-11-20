@@ -1,36 +1,47 @@
-# **Terraform Lab: Variable Files and Precedence**
+# Terraform Variable Files — Precedence
 
-This repository demonstrates how Terraform determines the final value of a variable when it is defined in multiple locations.
-Using an AWS EC2 provisioning example, this project shows how Terraform resolves conflicts between CLI flags, tfvars files, environment variables, and default variable definitions.
-
-The screenshots in the `img/` folder document the output of each scenario.
+> Professional README for the Terraform lab: *Variable Files — Precedence*
 
 ---
 
-## **Overview**
+## Overview
 
-Terraform allows variables to be supplied from several sources. When the same variable is defined more than once, Terraform applies a fixed precedence order to select which value is used.
+This repository demonstrates how Terraform resolves input variables when they are defined in multiple places (CLI flags, `.tfvars` files, environment variables, and `variable` blocks). The goal of this project is to show the order of precedence with practical examples and screenshots from an AWS EC2 provisioning exercise.
 
-This lab recreates each precedence level using different `.tfvars` files, environment variables, and CLI overrides to show how the EC2 instance configuration changes depending on the source of the variable.
-
----
-
-## **Variable Precedence Order (Highest to Lowest)**
-
-Terraform processes variable values in the following order:
-
-1. CLI arguments (`-var` and `-var-file`)
-2. Files matching `*.auto.tfvars` and `*.auto.tfvars.json`
-3. `terraform.tfvars.json`
-4. `terraform.tfvars`
-5. Environment variables (`TF_VAR_<name>`)
-6. Default values in `variable` blocks
-
-This order is based on the official Terraform documentation.
+Use this README as a quick reference for how Terraform chooses variable values and as a guide to reproduce the examples shown in the screenshots folder (`img/`).
 
 ---
 
-## **Repository Structure**
+## Key takeaways (short)
+
+* Terraform merges variable values from multiple sources and uses a defined precedence to decide which value to use.
+* Command-line values are strongest and the `default` in a `variable` block is the weakest.
+* Use clear naming and versioned `.tfvars` files for environment-specific configuration.
+
+---
+
+## Precedence (from highest to lowest)
+
+Terraform resolves variables in this order (later sources override earlier ones):
+
+1. **`-var` and `-var-file` options on the command line** (in the order provided)
+2. **Any `*.auto.tfvars` or `*.auto.tfvars.json` files** (processed in lexical order)
+3. **`terraform.tfvars.json` file**
+4. **`terraform.tfvars` file**
+5. **Environment variables** in the form `TF_VAR_<name>`
+6. **`default` argument in the `variable` block** inside Terraform configuration
+
+> Note: This ordering is taken from the Terraform documentation — command-line and HCP variables take precedence over file-based and environment values.
+
+---
+
+## Why this matters
+
+When multiple sources supply the same variable name, Terraform will pick the value from the highest-precedence source. Knowing this order prevents surprises (e.g., when a `.tfvars` is ignored because a CLI flag overrides it) and helps structure configuration for teams and environments safely.
+
+---
+
+## Example file structure (this repo)
 
 ```
 ├── main.tf
@@ -39,75 +50,97 @@ This order is based on the official Terraform documentation.
 ├── variable.tfvars
 ├── variable.auto.tfvars
 ├── img/
-│   ├── -var_cli_server.png
-│   ├── -var_cli_apply.png
+│   ├── -var cli server.png
+│   ├── -var_cli terraform_apply.png
 │   ├── variable_auto_tfvars_server.png
-│   ├── variable_auto_tfvars_apply.png
+│   ├── variable_auto_tfvars_terraform apply.png
 │   ├── variable_tf_server.png
-│   ├── variable_tf_apply.png
+│   ├── variable_tf_terraform apply.png
 │   ├── variable_tfvars_server.png
-│   └── variable_tfvars_apply.png
+│   └── variable_tfvars_terraform_apply.png
 └── README.md
 ```
 
-Each screenshot in the `img/` directory corresponds to a different variable source being used by Terraform.
+> The `img/` folder contains the screenshots captured during the hands-on runs. Filenames match the screenshots recorded from the environment.
 
 ---
 
-## **How to Reproduce This Lab**
+## How to reproduce locally
 
-### 1. Initialize Terraform
+1. Ensure you have Terraform installed (v1.x recommended) and AWS credentials available (`~/.aws/credentials` or environment variables).
+2. Initialize the working directory:
 
-```sh
+```bash
 terraform init
 ```
 
-### 2. Apply using default values
+3. Run `terraform plan` / `apply` using different value sources to observe precedence. Examples:
 
-```sh
+```bash
+# Use default values from variables.tf
 terraform apply --auto-approve
-```
 
-### 3. Apply using a `.tfvars` file
-
-```sh
+# Use a tfvars file explicitly
 terraform apply -var-file="variable.tfvars" --auto-approve
-```
 
-### 4. Apply using a CLI override (highest precedence)
+# Use CLI override (highest precedence)
+terraform apply -var="My_instance=t3.large" --auto-approve
 
-```sh
-terraform apply -var="instance_type=t3.large" --auto-approve
-```
-
-### 5. Apply using an environment variable
-
-```sh
-export TF_VAR_instance_type=t3.micro
+# Use environment variable
+export TF_VAR_My_instance=t3.micro
 terraform apply --auto-approve
 ```
 
-Compare the resulting AWS EC2 instance configurations with the screenshots stored in the `img/` folder.
+4. Observe instance type / other variable-driven results in the AWS Console screenshots recorded in `img/`.
 
 ---
 
-## **Screenshot Reference**
+## Security note
 
-The following categories of runs are documented:
-
-* CLI overrides
-* Explicit `.tfvars` file
-* Automatic `*.auto.tfvars` loading
-* Default values from `variables.tf`
-
-All screenshots are located in the `img/` directory.
+Never commit plaintext secrets (passwords, keys, tokens) to your Git repository. Use Vault, AWS Secrets Manager, or CI/CD secret stores and pass them via environment variables or secure backend integrations.
 
 ---
 
-## **Security Notice**
+## Screenshots
 
-Do not store sensitive information (e.g., AWS access keys) in variable files or Terraform configuration. Use environment variables, encrypted storage, or a secrets manager.
+Below are the project screenshots (they live in the `img/` folder). If you want to preview them here, use the links to the files stored in the project.
+
+![CLI override server](/mnt/data/-var cli server.png)
+
+![CLI apply output](/mnt/data/-var_cli terraform_apply.png)
+
+![auto.tfvars server](img/variable_auto_tfvars_server.png)
+
+![auto.tfvars apply](/mnt/data/variable_auto_tfvars_terraform apply.png)
+
+![terraform.tf server](img/data/variable_tf_server.png)
+
+![terraform.tf apply](/mnt/data/variable_tf_terraform apply.png)
+
+![tfvars server](img/variable_tfvars_server.png)
+
+![tfvars apply](img/variable_tfvars_terraform_apply.png)
 
 ---
 
 
+
+All previously embedded images are preserved below (files live under `img/` in the repo). If you prefer inline previews in this README, ensure that your Git host allows rendering images with spaces in names or rename them to use dashes or underscores; e.g. `var-cli-server.png`.
+
+![CLI override server](/mnt/data/-var cli server.png)
+
+![CLI apply output](/mnt/data/-var_cli terraform_apply.png)
+
+![auto.tfvars server](img/variable_auto_tfvars_server.png)
+
+![auto.tfvars apply](/mnt/data/variable_auto_tfvars_terraform apply.png)
+
+![terraform.tf server](img/variable_tf_server.png)
+
+![terraform.tf apply](/mnt/data/variable_tf_terraform apply.png)
+
+![tfvars server](img/variable_tfvars_server.png)
+
+![tfvars apply](img/variable_tfvars_terraform_apply.png)
+
+---
